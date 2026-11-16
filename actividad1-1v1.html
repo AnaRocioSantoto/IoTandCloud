@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Actividad 1.1: Estructura y conceptos que interrelacionan el IoT - Ana Rocío León - USTA Tunja</title>
+<style>
+  :root {
+    --primary: #1b2856;
+    --primary-light: #2b3f85;
+    --accent: #0097b2;
+    --accent-warm: #e5a93b;
+    --danger: #d9534f;
+    --success: #2e8b57;
+    --bg: #f4f6fa;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Header & Navigation (Estilo Institucional Oscuro USTA) */
+  header {
+    background: #0d1526;
+    color: white;
+    position: relative;
+    z-index: 100;
+    box-shadow: 0 4px 16px rgba(9, 14, 28, 0.35);
+    border-bottom: 1px solid rgba(56, 189, 248, 0.18);
+  }
+
+  .header-top {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 1rem 1.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .brand-usta {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .usta-emblem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 112px;
+    color: #ffffff;
+  }
+
+  .usta-emblem .uni-sub {
+    font-size: 0.56rem;
+    letter-spacing: 1.8px;
+    font-weight: 600;
+    margin-top: 0.25rem;
+    color: #e2e8f0;
+  }
+
+  .usta-emblem .uni-main {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 0.92rem;
+    letter-spacing: 0.8px;
+    font-weight: 700;
+    line-height: 1.05;
+    color: #ffffff;
+  }
+
+  .usta-emblem .uni-campus {
+    font-size: 0.52rem;
+    letter-spacing: 2px;
+    color: #94a3b8;
+    margin-top: 2px;
+  }
+
+  .header-meta h1 {
+    font-size: 1.38rem;
+    font-weight: 700;
+    color: #60a5fa;
+    line-height: 1.25;
+    margin-bottom: 0.25rem;
+  }
+
+  .header-meta p {
+    font-size: 0.88rem;
+    color: #94a3b8;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .header-meta p span {
+    color: #cbd5e1;
+    font-weight: 500;
+  }
+
+  .btn-biblio-header {
+    background: rgba(14, 165, 233, 0.12);
+    border: 1.5px solid #0284c7;
+    color: #38bdf8;
+    padding: 0.6rem 1.2rem;
+    border-radius: 10px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    transition: all 0.2s ease;
+  }
+
+  .btn-biblio-header:hover {
+    background: rgba(56, 189, 248, 0.22);
+    color: #ffffff;
+    border-color: #38bdf8;
+    transform: translateY(-1px);
+  }
+
+  .nav-bar-sub {
+    background: #131d33;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.5rem 1.75rem;
+  }
+
+  .nav-pills {
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .nav-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #cbd5e1;
+    padding: 0.38rem 0.82rem;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .nav-btn:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+  }
+
+  .nav-btn.active {
+    background: #0284c7;
+    border-color: #38bdf8;
+    color: #ffffff;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.45);
+  }
+
+  /* Progress bar */
+  .progress-container {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 101;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: var(--accent-warm);
+    width: 14.2%;
+    transition: width 0.3s ease;
+  }
+
+  /* Main Container */
+  main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem 5.5rem;
+  }
+
+  .slide {
+    display: none;
+    animation: fadeIn 0.35s ease;
+  }
+
+  .slide.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide-header {
+    margin-bottom: 1.75rem;
+    border-left: 5px solid var(--accent);
+    padding-left: 1rem;
+  }
+
+  .slide-kicker {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .slide-title {
+    font-size: 1.8rem;
+    color: var(--primary);
+    font-weight: 700;
+    margin-top: 0.2rem;
+  }
+
+  .slide-subtitle {
+    color: var(--muted);
+    font-size: 0.98rem;
+    margin-top: 0.3rem;
+  }
+
+  /* Grids & Cards */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
+    border: 1px solid var(--border);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  }
+
+  .card h3 {
+    color: var(--primary);
+    font-size: 1.12rem;
+    margin-bottom: 0.65rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* Interactive Hotspots / Tabs */
+  .hotspot-zone {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .hotspot-btn {
+    background: white;
+    border: 2px solid var(--border);
+    color: var(--primary);
+    padding: 0.6rem 1.05rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .hotspot-btn:hover {
+    border-color: var(--accent);
+    background: #f0f9ff;
+  }
+
+  .hotspot-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  .detail-panel {
+    background: white;
+    border-radius: 14px;
+    padding: 1.75rem;
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--accent);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+  }
+
+  .apa-cite-inline {
+    display: block;
+    margin-top: 0.85rem;
+    padding: 0.65rem 0.9rem;
+    background: #f8fafc;
+    border-left: 3px solid var(--primary-light);
+    font-size: 0.85rem;
+    color: #334155;
+    border-radius: 0 8px 8px 0;
+  }
+
+  /* SVG Visual Diagram Wrapper */
+  .diagram-box {
+    background: white;
+    border-radius: 14px;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .diagram-caption {
+    font-size: 0.83rem;
+    color: var(--muted);
+    margin-top: 0.6rem;
+    font-style: italic;
+  }
+
+  /* Architecture Layer Stack */
+  .arch-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .layer-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .layer-item {
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 0.95rem 1.2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+  }
+
+  .layer-item:hover, .layer-item.selected {
+    border-color: var(--accent);
+    background: #f0f9ff;
+    transform: translateX(4px);
+  }
+
+  .layer-item.selected {
+    border-left: 6px solid var(--primary);
+  }
+
+  .layer-tag {
+    background: var(--primary);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+  }
+
+  /* End-to-End Variable Pipeline Simulator */
+  .pipeline-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .pipe-node {
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+
+  .pipe-node:hover {
+    border-color: var(--accent);
+  }
+
+  .pipe-node.active {
+    border-color: var(--accent);
+    background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%);
+    box-shadow: 0 6px 16px rgba(0, 151, 178, 0.15);
+  }
+
+  .pipe-num {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .pipe-node.active .pipe-num {
+    background: var(--accent);
+  }
+
+  .payload-box {
+    background: #0f172a;
+    color: #38bdf8;
+    font-family: 'Consolas', 'Courier New', monospace;
+    padding: 1rem 1.25rem;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    overflow-x: auto;
+    margin-top: 1rem;
+    border-left: 4px solid var(--accent-warm);
+  }
+
+  /* Transport Comparison Table */
+  .table-wrap {
+    overflow-x: auto;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.91rem;
+  }
+
+  th {
+    background: var(--primary);
+    color: white;
+    padding: 0.85rem 1rem;
+    font-weight: 600;
+  }
+
+  td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  tr:hover td {
+    background: #f8fafc;
+  }
+
+  /* Modal / Popover */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.65);
+    z-index: 200;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .modal-backdrop.open {
+    display: flex;
+  }
+
+  .modal-box {
+    background: white;
+    max-width: 680px;
+    width: 100%;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    position: relative;
+    animation: fadeIn 0.25s ease;
+    max-height: 88vh;
+    overflow-y: auto;
+  }
+
+  .close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    background: #f1f5f9;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--text);
+  }
+
+  /* APA Citation Box */
+  .apa-item {
+    padding-left: 2rem;
+    text-indent: -2rem;
+    margin-bottom: 0.95rem;
+    font-size: 0.93rem;
+    color: #334155;
+  }
+
+  /* Checklist Interactive */
+  .check-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    background: #f8fafc;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    font-size: 0.92rem;
+  }
+
+  .check-row input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
+  }
+
+  /* Bottom Controls */
+  .footer-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid var(--border);
+    padding: 0.7rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 90;
+  }
+
+  .btn-nav-step {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .btn-nav-step:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+  }
+
+  .btn-nav-step:hover:not(:disabled) {
+    background: var(--accent);
+  }
+
+  .pill-tag {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    background: #e0f2fe;
+    color: #0369a1;
+    margin-right: 0.35rem;
+    margin-bottom: 0.35rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-container">
+  <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<header>
+  <div class="header-top">
+    <div class="brand-usta">
+      <!-- Escudo solar estilizado Universidad Santo Tomás -->
+      <div class="usta-emblem">
+        <svg width="54" height="54" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="30" fill="none" stroke="#ffffff" stroke-width="2.5"/>
+          <circle cx="50" cy="50" r="22" fill="#ffffff"/>
+          <!-- Rayos solares -->
+          <g stroke="#ffffff" stroke-width="2.8" stroke-linecap="round">
+            <line x1="50" y1="6" x2="50" y2="17"/>
+            <line x1="50" y1="83" x2="50" y2="94"/>
+            <line x1="6" y1="50" x2="17" y2="50"/>
+            <line x1="83" y1="50" x2="94" y2="50"/>
+            <line x1="19" y1="19" x2="27" y2="27"/>
+            <line x1="73" y1="73" x2="81" y2="81"/>
+            <line x1="81" y1="19" x2="73" y2="27"/>
+            <line x1="27" y1="73" x2="19" y2="81"/>
+            <line x1="33" y1="9" x2="37" y2="19"/>
+            <line x1="67" y1="9" x2="63" y2="19"/>
+            <line x1="33" y1="91" x2="37" y2="81"/>
+            <line x1="67" y1="91" x2="63" y2="81"/>
+            <line x1="9" y1="33" x2="19" y2="37"/>
+            <line x1="9" y1="67" x2="19" y2="63"/>
+            <line x1="91" y1="33" x2="81" y2="37"/>
+            <line x1="91" y1="67" x2="81" y2="63"/>
+          </g>
+          <!-- Cruz de Calatrava / Santo Domingo -->
+          <path d="M50 31 L54 46 L69 50 L54 54 L50 69 L46 54 L31 50 L46 46 Z" fill="#0d1526"/>
+          <circle cx="50" cy="50" r="4" fill="#ffffff"/>
+        </svg>
+        <span class="uni-sub">UNIVERSIDAD</span>
+        <span class="uni-main">SANTO TOMÁS</span>
+        <span class="uni-campus">CAMPUS VIRTUAL</span>
+      </div>
+
+      <div class="header-meta">
+        <h1>Actividad 1.1: Estructura y conceptos que interrelacionan el IoT</h1>
+        <p>Presentada por: <span>Ana Rocío León Lugo</span></p>
+        <p>Curso de <span>Internet de las Cosas y Cloud Computing</span></p>
+        <p>Presentado al Mg. <span>Wilson Fernando Valdez Solís</span></p>
+      </div>
+    </div>
+
+    <button class="btn-biblio-header" onclick="openBiblioModal()" title="Ver referencias bibliográficas APA 7.0">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+      </svg>
+      Bibliografía
+    </button>
+  </div>
+
+  <div class="nav-bar-sub">
+    <nav class="nav-pills" id="topNav">
+      <button class="nav-btn active" onclick="goToSlide(0)">1. Conceptos y Referentes</button>
+      <button class="nav-btn" onclick="goToSlide(1)">2. Elementos Físicos (Edge)</button>
+      <button class="nav-btn" onclick="goToSlide(2)">3. Capas y Edge/Fog/Cloud</button>
+      <button class="nav-btn" onclick="goToSlide(3)">4. Taxonomía y Principios</button>
+      <button class="nav-btn" onclick="goToSlide(4)">5. Caso Vigilancia (Variables)</button>
+      <button class="nav-btn" onclick="goToSlide(5)">6. Comunicación y Transporte</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- SLIDE 1: CONCEPTO Y REFERENTES CON APA 7.0 -->
+  <section class="slide active" id="slide-0">
+    <div class="slide-header">
+      <div class="slide-kicker">Conceptos de Internet de las Cosas - IoT</div>
+      <h2 class="slide-title">Fundamentación Conceptual del Internet de las Cosas (IoT)</h2>
+      <p class="slide-subtitle">Selecciona cada referente teórico para analizar su definición. Se usará un ejemplo de vigilancia inteligente para clarificar los conceptos.</p>
+    </div>
+
+    <div class="hotspot-zone" id="conceptHotspots">
+      <button class="hotspot-btn active" onclick="selectConcept('atzori', this)">📡 Convergencia de Paradigmas</button>
+      <button class="hotspot-btn" onclick="selectConcept('uit', this)">🌐 Estándar Global UIT-T Y.2060</button>
+      <button class="hotspot-btn" onclick="selectConcept('botta', this)">☁️ Integración CloudIoT</button>
+      <button class="hotspot-btn" onclick="selectConcept('gubbi', this)">🧠 Computación Ubicua</button>
+      <button class="hotspot-btn" style="border-color: var(--accent); background: #f0f9ff;" onclick="selectConcept('vigilancia', this)">🎥 Ejemplo Práctico: Vigilancia Inteligente</button>
+    </div>
+
+    <div class="detail-panel" id="conceptPanel">
+      <!-- Populated by JS -->
+    </div>
+
+    <!-- Ilustración Vectorial: Ecosistema Convergente IoT -->
+    <div class="diagram-box" style="margin-top: 1.5rem;">
+      <svg viewBox="0 0 860 210" style="width:100%; max-width:820px; height:auto;">
+        <defs>
+          <linearGradient id="gradBlue" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1b2856"/>
+            <stop offset="100%" stop-color="#2b3f85"/>
+          </linearGradient>
+          <linearGradient id="gradTeal" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#0097b2"/>
+            <stop offset="100%" stop-color="#0284c7"/>
+          </linearGradient>
+        </defs>
+        <!-- Mundo Físico -->
+        <rect x="20" y="30" width="220" height="145" rx="14" fill="#f0f9ff" stroke="#0097b2" stroke-width="2"/>
+        <text x="130" y="58" text-anchor="middle" font-weight="bold" fill="#1b2856" font-size="14">MUNDO FÍSICO ("COSAS")</text>
+        <text x="130" y="85" text-anchor="middle" fill="#334155" font-size="12">📷 Cámaras IP / Sensores PIR</text>
+        <text x="130" y="108" text-anchor="middle" fill="#334155" font-size="12">🎛️ Microcontroladores (Edge)</text>
+        <text x="130" y="131" text-anchor="middle" fill="#334155" font-size="12">🔒 Actuadores / Cerraduras</text>
+
+
+        <!-- Flecha 1 -->
+        <line x1="245" y1="102" x2="310" y2="102" stroke="#1b2856" stroke-width="3" marker-end="url(#arrow)"/>
+        <text x="278" y="90" text-anchor="middle" fill="#1b2856" font-size="11" font-weight="bold">MQTT / TLS</text>
+
+        <!-- Capa Conectividad / Fog -->
+        <rect x="315" y="30" width="230" height="145" rx="14" fill="url(#gradBlue)"/>
+        <text x="430" y="58" text-anchor="middle" font-weight="bold" fill="#ffffff" font-size="14">INFRAESTRUCTURA DE RED</text>
+        <text x="430" y="85" text-anchor="middle" fill="#e0f2fe" font-size="12">🌐 Interoperabilidad UIT-T Y.2060</text>
+        <text x="430" y="108" text-anchor="middle" fill="#e0f2fe" font-size="12">🌫️ Fog / Edge Gateways Locales</text>
+        <text x="430" y="131" text-anchor="middle" fill="#e0f2fe" font-size="12">🔐 Identidad IPv6 y Cifrado</text>
+
+
+        <!-- Flecha 2 -->
+        <line x1="550" y1="102" x2="615" y2="102" stroke="#0097b2" stroke-width="3"/>
+        <text x="582" y="90" text-anchor="middle" fill="#0097b2" font-size="11" font-weight="bold">Cloud IoT</text>
+
+        <!-- Mundo Digital / Cloud -->
+        <rect x="620" y="30" width="220" height="145" rx="14" fill="url(#gradTeal)"/>
+        <text x="730" y="58" text-anchor="middle" font-weight="bold" fill="#ffffff" font-size="14">NUBE Y SEMÁNTICA</text>
+        <text x="730" y="85" text-anchor="middle" fill="#ffffff" font-size="12">☁️ Almacenamiento Elástico</text>
+        <text x="730" y="108" text-anchor="middle" fill="#ffffff" font-size="12">📊 Analítica IA y Reglas</text>
+        <text x="730" y="131" text-anchor="middle" fill="#ffffff" font-size="12">📱 Dashboards y Alertas</text>
+ 
+      </svg>
+      <div class="diagram-caption">Figura 1. Articulación conceptual del ecosistema IoT desde la percepción física hasta la analítica en la nube. Elaboración propia sustentada en Atzori et al. (2010), UIT (2012) y Botta et al. (2016).</div>
+    </div>
+  </section>
+
+  <!-- SLIDE 2: SENSORES, CONTROLADORES Y ACTUADORES -->
+  <section class="slide" id="slide-1">
+    <div class="slide-header">
+      <div class="slide-kicker">Criterio 1 · Elementos de la Capa Física</div>
+      <h2 class="slide-title">Definición de Sensores, Controladores y Actuadores (Lazo de Control IoT)</h2>
+      <p class="slide-subtitle">Comprende cómo interactúan los dispositivos de campo para percibir el entorno, procesar decisiones locales y ejecutar acciones físicas, con citación APA 7.0.</p>
+    </div>
+
+    <!-- Ilustración SVG Lazo Cerrado -->
+    <div class="diagram-box">
+      <svg viewBox="0 0 860 190" style="width:100%; max-width:820px; height:auto;">
+        <!-- Entorno -->
+        <rect x="15" y="45" width="160" height="100" rx="12" fill="#fef3c7" stroke="#e5a93b" stroke-width="2"/>
+        <text x="95" y="82" text-anchor="middle" font-weight="bold" fill="#92400e" font-size="13">ENTORNO FÍSICO</text>
+        <text x="95" y="104" text-anchor="middle" fill="#78350f" font-size="11">Movimiento, temperatura,</text>
+        <text x="95" y="120" text-anchor="middle" fill="#78350f" font-size="11">apertura de puerta</text>
+
+        <!-- Flecha 1 -->
+        <path d="M175 95 L225 95" stroke="#1b2856" stroke-width="2.5"/>
+        <polygon points="225,90 235,95 225,100" fill="#1b2856"/>
+
+        <!-- Sensor -->
+        <rect x="235" y="35" width="180" height="120" rx="12" fill="#e0f2fe" stroke="#0097b2" stroke-width="2"/>
+        <text x="325" y="65" text-anchor="middle" font-weight="bold" fill="#1b2856" font-size="14">1. SENSOR</text>
+        <text x="325" y="88" text-anchor="middle" fill="#334155" font-size="11.5">Transductor de entrada</text>
+        <text x="325" y="106" text-anchor="middle" fill="#334155" font-size="11.5">Magnitud física → Señal</text>
+        <text x="325" y="124" text-anchor="middle" fill="#334155" font-size="11.5">eléctrica / digital (ADC)</text>
+        <text x="325" y="144" text-anchor="middle" fill="#0369a1" font-size="10.5" font-weight="bold">Ej: PIR, Magnético, Cámara</text>
+
+        <!-- Flecha 2 -->
+        <path d="M415 95 L465 95" stroke="#1b2856" stroke-width="2.5"/>
+        <polygon points="465,90 475,95 465,100" fill="#1b2856"/>
+
+        <!-- Controlador -->
+        <rect x="475" y="35" width="185" height="120" rx="12" fill="#1b2856"/>
+        <text x="567" y="65" text-anchor="middle" font-weight="bold" fill="#ffffff" font-size="14">2. CONTROLADOR</text>
+        <text x="567" y="88" text-anchor="middle" fill="#e2e8f0" font-size="11.5">Unidad de cómputo embebida</text>
+        <text x="567" y="106" text-anchor="middle" fill="#e2e8f0" font-size="11.5">Depura, evalúa lógica y</text>
+        <text x="567" y="124" text-anchor="middle" fill="#e2e8f0" font-size="11.5">gestiona red (Wi-Fi/MQTT)</text>
+        <text x="567" y="144" text-anchor="middle" fill="#e5a93b" font-size="10.5" font-weight="bold">Ej: ESP32, STM32, RPi</text>
+
+        <!-- Flecha 3 -->
+        <path d="M660 95 L705 95" stroke="#1b2856" stroke-width="2.5"/>
+        <polygon points="705,90 715,95 705,100" fill="#1b2856"/>
+
+        <!-- Actuador -->
+        <rect x="715" y="35" width="130" height="120" rx="12" fill="#dcfce7" stroke="#2e8b57" stroke-width="2"/>
+        <text x="780" y="65" text-anchor="middle" font-weight="bold" fill="#14532d" font-size="14">3. ACTUADOR</text>
+        <text x="780" y="88" text-anchor="middle" fill="#166534" font-size="11">Transductor salida</text>
+        <text x="780" y="106" text-anchor="middle" fill="#166534" font-size="11">Orden digital →</text>
+        <text x="780" y="124" text-anchor="middle" fill="#166534" font-size="11">Acción física</text>
+        <text x="780" y="144" text-anchor="middle" fill="#15803d" font-size="10.5" font-weight="bold">Ej: Relé, Cerradura</text>
+
+        <!-- Retroalimentación -->
+        <path d="M780 155 L780 178 L95 178 L95 150" fill="none" stroke="#2e8b57" stroke-width="2" stroke-dasharray="5,4"/>
+        <polygon points="90,152 95,143 100,152" fill="#2e8b57"/>
+        <text x="435" y="173" text-anchor="middle" fill="#15803d" font-size="11" font-weight="bold">Acción física sobre el entorno (Lazo cerrado de control)</text>
+      </svg>
+      <div class="diagram-caption">Figura 2. Interacción funcional entre sensores, controladores y actuadores en un nodo IoT. Elaboración propia basada en UIT (2012) y Kranz (2017).</div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <span class="pill-tag">Dispositivo de Entrada</span>
+        <h3>🌡️ Sensores (Transductores de Percepción)</h3>
+        <p style="font-size:0.93rem; color:#334155;">Dispositivos electrónicos capaces de detectar magnitudes físicas o químicas del entorno (luz, movimiento, temperatura, presión, proximidad) y transformarlas en señales eléctricas medibles y cuantificables para su procesamiento digital.</p>
+        <div class="apa-cite-inline">
+          Según la Unión Internacional de Telecomunicaciones (UIT, 2012) y Gubbi et al. (2013), los sensores constituyen la interfaz primaria de captura de datos del mundo físico hacia el dominio digital.
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="pill-tag">Unidad de Procesamiento</span>
+        <h3>🧠 Controladores (Microcontroladores / Gateways)</h3>
+        <p style="font-size:0.93rem; color:#334155;">Unidades de cómputo embebidas (MCU como ESP32/ARM o SBC como Raspberry Pi) que integran procesador, memoria y periféricos E/S. Ejecutan firmware para adquirir lecturas, depurar ruido, aplicar lógica local y gestionar los protocolos de comunicación hacia la red.</p>
+        <div class="apa-cite-inline">
+          De acuerdo con Kranz (2017) y Sethi y Sarangi (2017), el controlador actúa como el núcleo inteligente del nodo IoT que coordina la adquisición, el cifrado y la transmisión eficiente de paquetes.
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="pill-tag">Dispositivo de Salida</span>
+        <h3>⚙️ Actuadores (Transductores de Acción)</h3>
+        <p style="font-size:0.93rem; color:#334155;">Componentes electromecánicos, ópticos o acústicos que reciben una señal de control digital desde el controlador y la convierten en una acción física tangible sobre el entorno (activar un relé, bloquear una electrocerradura, encender reflectores o modular una válvula).</p>
+        <div class="apa-cite-inline">
+          Conforme a la Recomendación UIT-T Y.2060 (UIT, 2012) y Sethi y Sarangi (2017), los actuadores cierran el ciclo ciberfísico al materializar las decisiones computacionales en cambios reales del entorno.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: ARQUITECTURAS (3-5 CAPAS Y CLOUD / FOG / EDGE) -->
+  <section class="slide" id="slide-2">
+    <div class="slide-header">
+      <div class="slide-kicker">Arquitectura IoT y Paradigmas de Cómputo</div>
+      <h2 class="slide-title">Arquitecturas IoT: Capas (3 y 5) y Modelos Edge, Fog y Cloud Computing</h2>
+      <p class="slide-subtitle">Explora tanto la división vertical por capas funcionales como la distribución horizontal del procesamiento (Niebla/Fog y Nube/Cloud).</p>
+    </div>
+
+    <div class="arch-controls">
+      <button class="hotspot-btn active" id="btnArch3" onclick="setArchMode(3)">Modelo Clásico de 3 Capas</button>
+      <button class="hotspot-btn" id="btnArch5" onclick="setArchMode(5)">Modelo Empresarial de 5 Capas</button>
+      <button class="hotspot-btn" id="btnArchDist" onclick="setArchMode('dist')">☁️ Arquitectura Cloud vs. Fog (Niebla) vs. Edge</button>
+    </div>
+
+    <div id="archLayersView" class="grid-2" style="align-items: start;">
+      <div class="layer-stack" id="archStack">
+        <!-- Populated by JS -->
+      </div>
+      <div class="detail-panel" id="archDetail">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <div id="archDistView" style="display:none;">
+      <div class="diagram-box">
+        <svg viewBox="0 0 860 220" style="width:100%; max-width:830px; height:auto;">
+          <!-- Edge -->
+          <rect x="20" y="30" width="245" height="160" rx="14" fill="#e0f2fe" stroke="#0097b2" stroke-width="2"/>
+          <text x="142" y="56" text-anchor="middle" font-weight="bold" fill="#1b2856" font-size="14">1. EDGE COMPUTING (Borde)</text>
+          <text x="142" y="80" text-anchor="middle" fill="#334155" font-size="12">• En el mismo sensor/cámara</text>
+          <text x="142" y="102" text-anchor="middle" fill="#334155" font-size="12">• Latencia: &lt; 10 ms (Tiempo real)</text>
+          <text x="142" y="124" text-anchor="middle" fill="#334155" font-size="12">• Filtrado inicial y TinyML</text>
+          <text x="142" y="152" text-anchor="middle" fill="#0369a1" font-size="11" font-weight="bold">Ej: Cámara detecta silueta humana</text>
+        
+
+          <line x1="265" y1="110" x2="305" y2="110" stroke="#1b2856" stroke-width="2.5"/>
+
+          <!-- Fog -->
+          <rect x="305" y="30" width="250" height="160" rx="14" fill="#1b2856"/>
+          <text x="430" y="56" text-anchor="middle" font-weight="bold" fill="#ffffff" font-size="14">2. FOG COMPUTING (Niebla)</text>
+          <text x="430" y="80" text-anchor="middle" fill="#e2e8f0" font-size="12">• Gateways y servidores locales LAN</text>
+          <text x="430" y="102" text-anchor="middle" fill="#e2e8f0" font-size="12">• Latencia: 10 – 100 ms</text>
+          <text x="430" y="124" text-anchor="middle" fill="#e2e8f0" font-size="12">• Agregación, caché y operación offline</text>
+          <text x="430" y="152" text-anchor="middle" fill="#e5a93b" font-size="11" font-weight="bold">Ej: NVR/Broker local bloquea puerta</text>
+         
+
+          <line x1="555" y1="110" x2="595" y2="110" stroke="#0097b2" stroke-width="2.5"/>
+
+          <!-- Cloud -->
+          <rect x="595" y="30" width="245" height="160" rx="14" fill="#0097b2"/>
+          <text x="717" y="56" text-anchor="middle" font-weight="bold" fill="#ffffff" font-size="14">3. CLOUD COMPUTING (Nube)</text>
+          <text x="717" y="80" text-anchor="middle" fill="#ffffff" font-size="12">• Centros de datos globales (AWS/Azure)</text>
+          <text x="717" y="102" text-anchor="middle" fill="#ffffff" font-size="12">• Latencia: &gt; 100 ms (Macro-analítica)</text>
+          <text x="717" y="124" text-anchor="middle" fill="#ffffff" font-size="12">• Big Data, históricos y multi-sede</text>
+          <text x="717" y="152" text-anchor="middle" fill="#fef08a" font-size="11" font-weight="bold">Ej: Auditoría global y archivo S3</text>
+          
+        </svg>
+        <div class="diagram-caption">Figura 3. Continuo de procesamiento distribuido Edge – Fog (Niebla) – Cloud (Nube). Elaboración propia basada en Bonomi et al. (2012), Botta et al. (2016) y Shi et al. (2016).</div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3>🌫️ Computación en la Niebla (Fog Computing)</h3>
+          <p style="font-size:0.92rem; color:#334155;">Extiende los servicios de computación, almacenamiento y red de la nube hacia el borde de la red empresarial (gateways, routers industriales). Reduce drásticamente la latencia y el consumo de ancho de banda WAN al procesar datos localmente cerca de donde se generan.</p>
+          <span class="apa-cite-inline">Bonomi et al. (2012) introducen el paradigma <em>Fog Computing</em> como una plataforma virtualizada intermedia indispensable para aplicaciones IoT sensibles al retardo.</span>
+        </div>
+        <div class="card">
+          <h3>☁️ Computación en la Nube (Cloud Computing)</h3>
+          <p style="font-size:0.92rem; color:#334155;">Provee infraestructura elástica centralizada bajo demanda para almacenar series temporales masivas, entrenar modelos de aprendizaje automático, correlacionar eventos de múltiples ubicaciones geográficas y exponer paneles ejecutivos globales.</p>
+          <span class="apa-cite-inline">Botta et al. (2016) demuestran cómo la nube compensa las restricciones de cómputo y memoria de los nodos IoT mediante el modelo <em>CloudIoT</em>.</span>
+        </div>
+        <div class="card">
+          <h3>⚡ Computación en el Borde (Edge Computing)</h3>
+          <p style="font-size:0.92rem; color:#334155;">Ejecuta algoritmos de depuración, inferencia ligera y control directamente sobre el microcontrolador o cámara inteligente, evitando enviar datos crudos innecesarios y garantizando autonomía incluso ante cortes de Internet.</p>
+          <span class="apa-cite-inline">Shi et al. (2016) destacan que procesar en el borde mejora la privacidad, el ahorro energético y la respuesta en tiempo real.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: TAXONOMÍA, PRINCIPIOS Y HERRAMIENTAS -->
+  <section class="slide" id="slide-3">
+    <div class="slide-header">
+      <div class="slide-kicker">Taxonomía e Interactividad</div>
+      <h2 class="slide-title">Clasificación (Taxonomía), Principios de Diseño y Herramientas</h2>
+      <p class="slide-subtitle">Haz clic en cada tarjeta para abrir una ventana emergente con matrices detalladas y sustento técnico.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card" style="cursor:pointer;" onclick="openModal('taxonomia')">
+        <span class="pill-tag">Taxonomía IoT</span>
+        <h3>🗂️ Clasificación por Dominio y Alcance</h3>
+        <p style="font-size:0.92rem; color:#475569; margin-bottom:0.8rem;">Segmentación según criticidad, entorno operativo y modelo de consumo:</p>
+        <ul style="padding-left:1.2rem; font-size:0.9rem; color:#334155;">
+          <li><strong>CIoT (Consumo):</strong> Domótica, wearables, salud personal.</li>
+          <li><strong>IIoT (Industrial):</strong> Telemetría SCADA, mantenimiento predictivo.</li>
+          <li><strong>Infraestructura / Smart Cities:</strong> Seguridad ciudadana, redes eléctricas.</li>
+        </ul>
+        <p style="margin-top:0.8rem; color:var(--accent); font-weight:600; font-size:0.85rem;">+ Clic para ver matriz completa</p>
+      </div>
+
+      <div class="card" style="cursor:pointer;" onclick="openModal('principios')">
+        <span class="pill-tag">Ingeniería IoT</span>
+        <h3>⚙️ Principios Rectores de Funcionamiento</h3>
+        <p style="font-size:0.92rem; color:#475569; margin-bottom:0.8rem;">Atributos arquitectónicos indispensables para soluciones resilientes:</p>
+        <ul style="padding-left:1.2rem; font-size:0.9rem; color:#334155;">
+          <li><strong>Eficiencia Energética:</strong> Ciclos <em>Deep Sleep</em> y bajo consumo.</li>
+          <li><strong>Escalabilidad Horizontal:</strong> Gestión de millones de tópicos.</li>
+          <li><strong>Seguridad por Diseño:</strong> Cifrado TLS, certificados X.509 y TPM.</li>
+        </ul>
+        <p style="margin-top:0.8rem; color:var(--accent); font-weight:600; font-size:0.85rem;">+ Clic para profundizar principios</p>
+      </div>
+
+      <div class="card" style="cursor:pointer;" onclick="openModal('herramientas')">
+        <span class="pill-tag">Stack Tecnológico</span>
+        <h3>🛠️ Herramientas y Ecosistema de Desarrollo</h3>
+        <p style="font-size:0.92rem; color:#475569; margin-bottom:0.8rem;">Tecnologías clave desde el silicio hasta la analítica en la nube:</p>
+        <ul style="padding-left:1.2rem; font-size:0.9rem; color:#334155;">
+          <li><strong>Hardware/Edge:</strong> ESP32, ARM Cortex-M, Raspberry Pi, FreeRTOS.</li>
+          <li><strong>Brokers/Fog:</strong> Eclipse Mosquitto, EMQX, Node-RED.</li>
+          <li><strong>Cloud & Analítica:</strong> AWS IoT Core, InfluxDB, Grafana.</li>
+        </ul>
+        <p style="margin-top:0.8rem; color:var(--accent); font-weight:600; font-size:0.85rem;">+ Clic para explorar stack completo</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: TRATAMIENTO DE VARIABLES (CASO VIGILANCIA INTELIGENTE) -->
+  <section class="slide" id="slide-4">
+    <div class="slide-header">
+      <div class="slide-kicker">Tratamiento de Variables</div>
+      <h2 class="slide-title">Trazabilidad End-to-End: Caso Vigilancia Inteligente Perimetral</h2>
+      <p class="slide-subtitle">De acuerdo al ejemplo de Vigilancia Tecnológica, sigue el ciclo de vida de la variable desde su captura física hasta la actuación automatizada (Obtención → Depuración → Clasificación → Procesamiento → Aplicación).</p>
+    </div>
+
+    <div class="pipeline-steps" id="pipelineNodes">
+      <div class="pipe-node active" onclick="selectPipeStep(0, this)">
+        <div class="pipe-num">1</div>
+        <h4>Obtención (Adquisición)</h4>
+        <p style="font-size:0.82rem; color:var(--muted);">Sensor PIR/Cámara → ADC/MIPI</p>
+      </div>
+      <div class="pipe-node" onclick="selectPipeStep(1, this)">
+        <div class="pipe-num">2</div>
+        <h4>Depuración (Edge Filtering)</h4>
+        <p style="font-size:0.82rem; color:var(--muted);">Debounce y umbral confianza</p>
+      </div>
+      <div class="pipe-node" onclick="selectPipeStep(2, this)">
+        <div class="pipe-num">3</div>
+        <h4>Clasificación y Esquema</h4>
+        <p style="font-size:0.82rem; color:var(--muted);">Serialización JSON y prioridad</p>
+      </div>
+      <div class="pipe-node" onclick="selectPipeStep(3, this)">
+        <div class="pipe-num">4</div>
+        <h4>Procesamiento (Fog/Cloud)</h4>
+        <p style="font-size:0.82rem; color:var(--muted);">Motor de reglas y correlación</p>
+      </div>
+      <div class="pipe-node" onclick="selectPipeStep(4, this)">
+        <div class="pipe-num">5</div>
+        <h4>Aplicación y Actuación</h4>
+        <p style="font-size:0.82rem; color:var(--muted);">Dashboard, alerta y bloqueo</p>
+      </div>
+    </div>
+
+    <div class="detail-panel" id="pipeDetail">
+      <!-- Populated by JS -->
+    </div>
+  </section>
+
+  <!-- SLIDE 6: SISTEMAS DE COMUNICACIÓN Y TRANSPORTE -->
+  <section class="slide" id="slide-5">
+    <div class="slide-header">
+      <div class="slide-kicker">Comunicación y Transporte</div>
+      <h2 class="slide-title">Sistemas de Comunicación y Transporte de Información en IoT</h2>
+      <p class="slide-subtitle">Arquitectura de comunicaciones (medios físicos/inalámbricos vs. protocolos de mensajería) y justificación técnica de selección.</p>
+    </div>
+
+    <!-- Diagrama SVG Pila de Comunicación y Transporte -->
+    <div class="diagram-box">
+      <svg viewBox="0 0 860 165" style="width:100%; max-width:820px; height:auto;">
+        <rect x="20" y="20" width="250" height="125" rx="12" fill="#f0f9ff" stroke="#0097b2" stroke-width="2"/>
+        <text x="145" y="45" text-anchor="middle" font-weight="bold" fill="#1b2856" font-size="13">1. ACCESO Y ENLACE FÍSICO</text>
+        <text x="145" y="68" text-anchor="middle" fill="#334155" font-size="11.5">• Corto alcance: BLE, Zigbee, Wi-Fi</text>
+        <text x="145" y="88" text-anchor="middle" fill="#334155" font-size="11.5">• Largo alcance: LoRaWAN, NB-IoT</text>
+        <text x="145" y="108" text-anchor="middle" fill="#334155" font-size="11.5">• Cableado industrial: Ethernet/PoE</text>
+        <text x="145" y="132" text-anchor="middle" fill="#0369a1" font-size="10.5" font-weight="bold">Medio de propagación RF / Cable</text>
+
+        <path d="M270 82 L305 82" stroke="#1b2856" stroke-width="2.5"/>
+        <polygon points="305,77 315,82 305,87" fill="#1b2856"/>
+
+        <rect x="315" y="20" width="230" height="125" rx="12" fill="#1b2856"/>
+        <text x="430" y="45" text-anchor="middle" font-weight="bold" fill="#ffffff" font-size="13">2. RED Y TRANSPORTE SEGURO</text>
+        <text x="430" y="68" text-anchor="middle" fill="#e2e8f0" font-size="11.5">• Direccionamiento: IPv6 / 6LoWPAN</text>
+        <text x="430" y="88" text-anchor="middle" fill="#e2e8f0" font-size="11.5">• Transporte: TCP (fiable) / UDP (ligero)</text>
+        <text x="430" y="108" text-anchor="middle" fill="#e2e8f0" font-size="11.5">• Seguridad: TLS 1.3 / DTLS</text>
+        <text x="430" y="132" text-anchor="middle" fill="#e5a93b" font-size="10.5" font-weight="bold">Enrutamiento e integridad de paquetes</text>
+
+        <path d="M545 82 L580 82" stroke="#0097b2" stroke-width="2.5"/>
+        <polygon points="580,77 590,82 580,87" fill="#0097b2"/>
+
+        <rect x="590" y="20" width="250" height="125" rx="12" fill="#0097b2"/>
+        <text x="715" y="45" text-anchor="middle" font-weight="bold" fill="#ffffff" font-size="13">3. MENSAJERÍA (APLICACIÓN)</text>
+        <text x="715" y="68" text-anchor="middle" fill="#ffffff" font-size="11.5">• Pub/Sub: MQTT, AMQP</text>
+        <text x="715" y="88" text-anchor="middle" fill="#ffffff" font-size="11.5">• Request/Response: CoAP, HTTP/REST</text>
+        <text x="715" y="108" text-anchor="middle" fill="#ffffff" font-size="11.5">• Streaming: WebSockets / gRPC</text>
+        <text x="715" y="132" text-anchor="middle" fill="#fef08a" font-size="10.5" font-weight="bold">Intercambio semántico de payloads</text>
+      </svg>
+      <div class="diagram-caption">Figura 4. Capas del sistema de comunicación y transporte de datos IoT (Al-Fuqaha et al., 2015).</div>
+    </div>
+
+    <div class="hotspot-zone">
+      <button class="hotspot-btn active" onclick="filterTransport('all', this)">Todos los Sistemas</button>
+      <button class="hotspot-btn" onclick="filterTransport('corto', this)">Comunicación Corto Alcance (PAN/LAN)</button>
+      <button class="hotspot-btn" onclick="filterTransport('lpwan', this)">Comunicación Largo Alcance (LPWAN)</button>
+      <button class="hotspot-btn" onclick="filterTransport('app', this)">Protocolos de Transporte de Mensajes</button>
+    </div>
+
+    <div class="table-wrap">
+      <table id="transportTable">
+        <thead>
+          <tr>
+            <th>Tecnología / Protocolo</th>
+            <th>Nivel / Categoría</th>
+            <th>Alcance / Topología</th>
+            <th>Consumo / Ancho de Banda</th>
+            <th>Justificación Técnica (Incluyendo Vigilancia Inteligente)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-cat="corto">
+            <td><strong>BLE (Bluetooth Low Energy)</strong></td>
+            <td>Comunicación PAN</td>
+            <td>10 – 100 m (Estrella / Mesh)</td>
+            <td>Muy bajo / Hasta 2 Mbps</td>
+            <td>Ideal para balizas de identificación de personal (beacons) y sensores de proximidad alimentados por batería de botón.</td>
+          </tr>
+          <tr data-cat="corto">
+            <td><strong>Zigbee / Thread (IEEE 802.15.4)</strong></td>
+            <td>Comunicación WPAN Mesh</td>
+            <td>10 – 100 m por salto (Malla)</td>
+            <td>Bajo / 250 kbps</td>
+            <td>Recomendado en sensores magnéticos de puertas y ventanas interiores donde la topología malla evita puntos únicos de fallo.</td>
+          </tr>
+          <tr data-cat="corto">
+            <td><strong>Wi-Fi 6 / Ethernet PoE</strong></td>
+            <td>Comunicación LAN Alta Capacidad</td>
+            <td>50 – 150 m (Estrella)</td>
+            <td>Alto / Cientos de Mbps – 1 Gbps</td>
+            <td>Indispensable en cámaras IP de vigilancia inteligente para transmitir clips de video de alta resolución y alimentar el dispositivo (PoE).</td>
+          </tr>
+          <tr data-cat="lpwan">
+            <td><strong>LoRaWAN</strong></td>
+            <td>Comunicación LPWAN</td>
+            <td>2 – 15 km (Estrella de estrellas)</td>
+            <td>Ultra bajo / 0.3 – 50 kbps</td>
+            <td>Justificado en sensores perimetrales remotos (cercas, portones rurales o parques solares) sin cobertura Wi-Fi ni red eléctrica.</td>
+          </tr>
+          <tr data-cat="lpwan">
+            <td><strong>NB-IoT / LTE-M (3GPP)</strong></td>
+            <td>Comunicación LPWAN Celular</td>
+            <td>1 – 10 km (Red operador)</td>
+            <td>Bajo / 20 kbps – 1 Mbps</td>
+            <td>Óptimo como enlace de respaldo (failover) en sistemas de alarma críticos ante corte intencional de fibra o electricidad local.</td>
+          </tr>
+          <tr data-cat="app">
+            <td><strong>MQTT (OASIS / ISO 20922)</strong></td>
+            <td>Transporte Mensajería (TCP/TLS)</td>
+            <td>Publicación / Suscripción (Broker)</td>
+            <td>Cabecera mínima (2 bytes) / Muy bajo</td>
+            <td>Protocolo principal para enviar alertas de intrusión en milisegundos con niveles de calidad de servicio (QoS 1/2) garantizados.</td>
+          </tr>
+          <tr data-cat="app">
+            <td><strong>CoAP (RFC 7252)</strong></td>
+            <td>Transporte Restringido (UDP/DTLS)</td>
+            <td>Petición / Respuesta (Estilo REST)</td>
+            <td>Cabecera 4 bytes / Ultra ligero</td>
+            <td>Adecuado para microcontroladores de ultra bajo consumo con memoria limitada que operan sobre redes 6LoWPAN/Thread.</td>
+          </tr>
+          <tr data-cat="app">
+            <td><strong>HTTP/REST & WebSockets</strong></td>
+            <td>Integración Cloud / APIs</td>
+            <td>Cliente / Servidor (TCP/TLS)</td>
+            <td>Cabecera amplia / Alto</td>
+            <td>Utilizado para subir fragmentos de video hacia Object Storage en la nube y alimentar consolas web de monitoreo en tiempo real.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+ 
+</main>
+
+<!-- MODAL FOR POPUPS -->
+<div class="modal-backdrop" id="infoModal" onclick="closeModalOnBg(event)">
+  <div class="modal-box">
+    <button class="close-modal" onclick="closeModal()">&times;</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- FOOTER NAVIGATION -->
+<div class="footer-nav">
+  <button class="btn-nav-step" id="prevBtn" onclick="changeSlide(-1)" disabled>← Anterior</button>
+  <span id="slideIndicator" style="font-weight:600; color:var(--primary); font-size:0.9rem;">Sección 1 de 7</span>
+  <button class="btn-nav-step" id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+</div>
+
+<script>
+  let currentSlide = 0;
+  const totalSlides = 7;
+
+  function goToSlide(index) {
+    currentSlide = index;
+    document.querySelectorAll('.slide').forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+    });
+    document.querySelectorAll('.nav-btn').forEach((b, i) => {
+      b.classList.toggle('active', i === index);
+    });
+    document.getElementById('prevBtn').disabled = index === 0;
+    document.getElementById('nextBtn').disabled = index === totalSlides - 1;
+    document.getElementById('slideIndicator').textContent = `Sección ${index + 1} de ${totalSlides}`;
+    document.getElementById('progressBar').style.width = `${((index + 1) / totalSlides) * 100}%`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function changeSlide(delta) {
+    const next = currentSlide + delta;
+    if (next >= 0 && next < totalSlides) {
+      goToSlide(next);
+    }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') changeSlide(1);
+    if (e.key === 'ArrowLeft') changeSlide(-1);
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // Slide 1: Concept Data with APA 7.0
+  const conceptData = {
+    atzori: {
+      title: "Enfoque de Convergencia de Tres Paradigmas",
+      citation: "Atzori et al., 2010",
+      body: "Atzori et al. (2010) definen el Internet de las Cosas como el resultado de la convergencia de tres visiones complementarias: <strong>(1) Orientada a las cosas</strong> (identificación mediante RFID, sensores y actuadores embebidos), <strong>(2) Orientada a Internet</strong> (conectividad IP, protocolos ligeros y middleware) y <strong>(3) Orientada a la semántica</strong> (representación, almacenamiento e interpretación inteligente de datos heterogéneos).",
+      ref: "Atzori, L., Iera, A., & Morabito, G. (2010). The Internet of Things: A survey. Computer Networks, 54(15), 2787–2805."
+    },
+    uit: {
+      title: "Definición Normativa Internacional UIT-T",
+      citation: "(Unión Internacional de Telecomunicaciones [UIT], 2012)",
+      body: "La Unión Internacional de Telecomunicaciones (UIT, 2012) establece que el IoT es una <em>«infraestructura mundial para la sociedad de la información que propicia la prestación de servicios avanzados mediante la interconexión de cosas (físicas y virtuales) gracias a la interoperabilidad de tecnologías de la información y la comunicación presentes y futuras»</em>, dotando a los objetos de capacidades de identificación, captura, procesamiento y comunicación.",
+      ref: "Unión Internacional de Telecomunicaciones. (2012). Recomendación UIT-T Y.2060: Descripción general de Internet de los objetos."
+    },
+    botta: {
+      title: "Paradigma de Integración CloudIoT (Botta et al., 2016)",
+      citation: "(Botta et al., 2016)",
+      body: "Botta et al. (2016) conceptualizan el IoT en sinergia directa con la computación en la nube (<em>CloudIoT</em>). Mientras los dispositivos físicos en el borde presentan restricciones de batería, procesamiento y almacenamiento, el <em>Cloud Computing</em> provee elasticidad bajo demanda para ingestar, analizar y gobernar millones de flujos de telemetría distribuidos.",
+      ref: "Botta, A., De Donato, W., Persico, V., & Pescapé, A. (2016). Integration of Cloud computing and Internet of Things: A survey. Future Generation Computer Systems, 56, 684–700."
+    },
+    gubbi: {
+      title: "Visión de Computación Ubicua y Sensado Distribuido (Gubbi et al., 2013)",
+      citation: "(Gubbi et al., 2013)",
+      body: "Para Gubbi et al. (2013), el IoT representa la interconexión de dispositivos de detección y actuación que proporcionan la capacidad de compartir información a través de plataformas unificadas, creando un entorno operativo común donde la analítica de datos transforma las mediciones ambientales en conocimiento accionable.",
+      ref: "Gubbi, J., Buyya, R., Marusic, S., & Palaniswami, M. (2013). Internet of Things (IoT): A vision, architectural elements, and future directions. Future Generation Computer Systems, 29(7), 1645–1660."
+    },
+    vigilancia: {
+      title: "Ejemplo Práctico Aplicado: Vigilancia Inteligente Perimetral",
+      citation: "",
+      body: `En un sistema de <strong>vigilancia inteligente para infraestructura crítica</strong>, los conceptos teóricos operan de forma integrada:<br><br>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap:0.85rem;">
+        <div style="background:#f8fafc; padding:0.85rem; border-radius:8px; border-left:4px solid var(--primary);">
+          <strong>1. Percepción y Actuación (UIT, 2012):</strong><br>
+          Sensores infrarrojos PIR, contactos magnéticos en puertas, cámaras IP con visión nocturna y electrocerraduras direccionables mediante IPv6.
+        </div>
+        <div style="background:#f8fafc; padding:0.85rem; border-radius:8px; border-left:4px solid var(--accent);">
+          <strong>2. Edge & Fog Gateway (Bonomi et al., 2012):</strong><br>
+          Un nodo local ejecuta inferencia de visión artificial (detección de silueta humana) y filtra falsas alarmas antes de publicar eventos vía <strong>MQTT/TLS</strong>.
+        </div>
+        <div style="background:#f8fafc; padding:0.85rem; border-radius:8px; border-left:4px solid var(--accent-warm);">
+          <strong>3. CloudIoT (Botta et al., 2016):</strong><br>
+          La nube almacena clips de evidencia en Object Storage, correlaciona permisos de acceso y envía notificaciones en tiempo real al centro de control.
+        </div>
+      </div>`,
+      ref: "Síntesis aplicada basada en Atzori et al. (2010), Bonomi et al. (2012), Botta et al. (2016) y UIT (2012)."
+    }
+  };
+
+  function selectConcept(key, btn) {
+    document.querySelectorAll('#conceptHotspots .hotspot-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    const item = conceptData[key];
+    document.getElementById('conceptPanel').innerHTML = `
+      <span class="pill-tag">${item.citation}</span>
+      <h3 style="color:var(--primary); margin: 0.45rem 0 0.7rem;">${item.title}</h3>
+      <div style="font-size:0.98rem; color:#334155;">${item.body}</div>
+      <div class="apa-cite-inline"><strong>Fuente:</strong> ${item.ref}</div>
+    `;
+  }
+
+  // Slide 3: Architecture Data (3 capas, 5 capas y Cloud/Fog/Edge)
+  const archModels = {
+    3: [
+      {
+        name: "Capa 3: Aplicación",
+        tag: "Nivel Superior (Servicios)",
+        desc: "Entrega servicios inteligentes específicos al usuario final o a sistemas corporativos (consolas de videovigilancia, alertas móviles, analítica energética).",
+        tools: "Grafana, ThingsBoard, aplicaciones móviles, APIs REST, sistemas VMS/SCADA.",
+        ref: "Sethi, P., & Sarangi, S. R. (2017). Internet of Things: Architectures, protocols, and applications."
+      },
+      {
+        name: "Capa 2: Red / Transporte",
+        tag: "Nivel Intermedio (Conectividad)",
+        desc: "Garantiza la transmisión confiable y cifrada de los datos desde los sensores/controladores hacia servidores Fog o plataformas Cloud.",
+        tools: "Gateways IoT, Wi-Fi 6, Ethernet PoE, 4G/5G, LoRaWAN, IPv6/6LoWPAN, brokers MQTT.",
+        ref: "Al-Fuqaha, A. et al. (2015). Internet of Things: A survey on enabling technologies, protocols, and applications."
+      },
+      {
+        name: "Capa 1: Percepción (Sensado y Actuación)",
+        tag: "Nivel Físico (Hardware)",
+        desc: "Interactúa directamente con el entorno mediante sensores que capturan variables físicas y actuadores que ejecutan acciones.",
+        tools: "Sensores PIR, cámaras IP, contactos magnéticos, microcontroladores ESP32, relés y electrocerraduras.",
+        ref: "Unión Internacional de Telecomunicaciones [UIT]. (2012). Recomendación UIT-T Y.2060."
+      }
+    ],
+    5: [
+      {
+        name: "Capa 5: Negocio (Business)",
+        tag: "Gobernanza, KPIs y Valor",
+        desc: "Gestiona modelos de negocio, políticas de seguridad corporativa, cumplimiento normativo, indicadores de gestión (KPIs) y toma de decisiones.",
+        tools: "BI empresarial, motores de reglas de negocio, gestión de riesgos y auditoría.",
+        ref: "Sethi, P., & Sarangi, S. R. (2017). Internet of Things: Architectures, protocols, and applications."
+      },
+      {
+        name: "Capa 4: Aplicación",
+        tag: "Interfaz y Visualización",
+        desc: "Provee paneles de control operativos, mapas de calor, notificaciones push y flujos de trabajo específicos por vertical.",
+        tools: "Grafana, ThingsBoard, Node-RED Dashboard, consolas de monitoreo.",
+        ref: "Al-Fuqaha, A. et al. (2015). IEEE Communications Surveys & Tutorials."
+      },
+      {
+        name: "Capa 3: Procesamiento (Middleware / Fog & Cloud)",
+        tag: "Almacenamiento y Analítica",
+        desc: "Ingesta, depura, almacena y procesa flujos masivos de eventos mediante bases de datos de series temporales, brokers y servicios en la nube.",
+        tools: "AWS IoT Core, Azure IoT Hub, Apache Kafka, InfluxDB, nodos Fog locales.",
+        ref: "Botta, A. et al. (2016). Integration of Cloud computing and Internet of Things: A survey."
+      },
+      {
+        name: "Capa 2: Transporte",
+        tag: "Transferencia Segura",
+        desc: "Transfiere de forma cifrada los datos desde la capa física hacia el middleware usando redes inalámbricas/cableadas y protocolos ligeros.",
+        tools: "MQTT sobre TLS, CoAP/DTLS, LoRaWAN, NB-IoT, Zigbee.",
+        ref: "Al-Fuqaha, A. et al. (2015)."
+      },
+      {
+        name: "Capa 1: Percepción (Objetos)",
+        tag: "Sensores, Controladores y Actuadores",
+        desc: "Captura magnitudes físicas mediante sensores, realiza preprocesamiento en el controlador embebido y acciona actuadores locales.",
+        tools: "ESP32, Raspberry Pi, sensores PIR/ópticos, relés industriales.",
+        ref: "Kranz, M. (2017). Building the Internet of Things."
+      }
+    ]
+  };
+
+  let currentArch = 3;
+  let selectedLayerIdx = 0;
+
+  function setArchMode(mode) {
+    document.getElementById('btnArch3').classList.toggle('active', mode === 3);
+    document.getElementById('btnArch5').classList.toggle('active', mode === 5);
+    document.getElementById('btnArchDist').classList.toggle('active', mode === 'dist');
+
+    if (mode === 'dist') {
+      document.getElementById('archLayersView').style.display = 'none';
+      document.getElementById('archDistView').style.display = 'block';
+    } else {
+      document.getElementById('archLayersView').style.display = 'grid';
+      document.getElementById('archDistView').style.display = 'none';
+      currentArch = mode;
+      selectedLayerIdx = 0;
+      renderArch();
+    }
+  }
+
+  function renderArch() {
+    const layers = archModels[currentArch];
+    const stackEl = document.getElementById('archStack');
+    stackEl.innerHTML = layers.map((l, idx) => `
+      <div class="layer-item ${idx === selectedLayerIdx ? 'selected' : ''}" onclick="selectLayer(${idx})">
+        <div>
+          <strong style="color:var(--primary); font-size:1.02rem;">${l.name}</strong>
+          <div style="font-size:0.83rem; color:var(--muted);">${l.tag}</div>
+        </div>
+        <span class="layer-tag">Inspeccionar</span>
+      </div>
+    `).join('');
+
+    const activeLayer = layers[selectedLayerIdx];
+    document.getElementById('archDetail').innerHTML = `
+      <span class="pill-tag">Arquitectura de ${currentArch} Capas</span>
+      <h3 style="color:var(--primary); margin: 0.5rem 0 0.75rem;">${activeLayer.name}</h3>
+      <p style="margin-bottom:1rem; color:#334155;">${activeLayer.desc}</p>
+      <div style="background:#f8fafc; padding:0.9rem; border-radius:8px; border:1px solid var(--border);">
+        <strong style="color:var(--primary); font-size:0.9rem;">🛠️ Componentes y Herramientas:</strong>
+        <p style="font-size:0.9rem; color:#475569; margin-top:0.3rem;">${activeLayer.tools}</p>
+      </div>
+      <div class="apa-cite-inline"><strong>Referencia:</strong> ${activeLayer.ref}</div>
+    `;
+  }
+
+  function selectLayer(idx) {
+    selectedLayerIdx = idx;
+    renderArch();
+  }
+
+  // Slide 4: Modals
+  const modalData = {
+    taxonomia: `
+      <h3 style="color:var(--primary); margin-bottom:0.75rem;">🗂️ Taxonomía Integral de Soluciones IoT</h3>
+      <p style="font-size:0.94rem; margin-bottom:0.9rem;">Conforme a Gubbi et al. (2013) y Kranz (2017), los sistemas IoT se clasifican en cuatro ejes:</p>
+      <ul style="padding-left:1.25rem; font-size:0.92rem; color:#334155; display:flex; flex-direction:column; gap:0.55rem;">
+        <li><strong>Por Dominio de Aplicación:</strong> IoT de Consumo (CIoT), IoT Industrial (IIoT / Industria 4.0), Seguridad y Vigilancia Inteligente, IoT Médico (IoMT) y Smart Cities.</li>
+        <li><strong>Por Topología de Comunicación:</strong> Punto a punto, Estrella (Wi-Fi, LoRaWAN), Malla/Mesh (Zigbee, Thread) e Híbrida Fog-Cloud.</li>
+        <li><strong>Por Alimentación Energética:</strong> Nodos con energía continua/PoE (cámaras IP, gateways) vs. Nodos autónomos a batería con ciclos <em>Deep Sleep</em>.</li>
+        <li><strong>Por Ubicación del Cómputo:</strong> Edge (en el sensor), Fog/Niebla (en gateway local) y Cloud/Nube (centros de datos centralizados).</li>
+      </ul>
+    `,
+    principios: `
+      <h3 style="color:var(--primary); margin-bottom:0.75rem;">⚙️ Principios de Funcionamiento y Diseño</h3>
+      <ul style="padding-left:1.25rem; font-size:0.92rem; color:#334155; display:flex; flex-direction:column; gap:0.55rem;">
+        <li><strong>Desacoplamiento Asíncrono:</strong> Uso del patrón Publicación/Suscripción (MQTT) para evitar bloqueos entre miles de sensores y consumidores.</li>
+        <li><strong>Continuidad Operativa (Fog Resilience):</strong> Almacenamiento local temporal (<em>store-and-forward</em>) en el gateway cuando falla la conexión a Internet.</li>
+        <li><strong>Optimización de Payload:</strong> Transmisión de metadatos compactos (JSON/CBOR) en lugar de flujos crudos pesados.</li>
+        <li><strong>Seguridad Extremo a Extremo:</strong> Autenticación mutua con certificados X.509, cifrado TLS 1.3 y actualización remota segura de firmware (OTA).</li>
+      </ul>
+    `,
+    herramientas: `
+      <h3 style="color:var(--primary); margin-bottom:0.75rem;">🛠️ Ecosistema de Herramientas por Capa</h3>
+      <ul style="padding-left:1.25rem; font-size:0.92rem; color:#334155; display:flex; flex-direction:column; gap:0.55rem;">
+        <li><strong>Sensores y Actuadores:</strong> PIR HC-SR501, sensores magnéticos, cámaras OV2640/IMX219, relés de estado sólido, electrocerraduras.</li>
+        <li><strong>Controladores y Firmware Edge:</strong> ESP32-S3, Raspberry Pi 4/5, STM32, FreeRTOS, MicroPython, OpenCV / TensorFlow Lite.</li>
+        <li><strong>Brokers y Fog Gateways:</strong> Eclipse Mosquitto, EMQX, Node-RED, Frigate NVR (detección local).</li>
+        <li><strong>Cloud, Storage y Visualización:</strong> AWS IoT Core, Amazon S3, InfluxDB, Grafana y ThingsBoard.</li>
+      </ul>
+    `
+  };
+
+  function openModal(key) {
+    document.getElementById('modalContent').innerHTML = modalData[key];
+    document.getElementById('infoModal').classList.add('open');
+  }
+
+  function openBiblioModal() {
+    document.getElementById('modalContent').innerHTML = `
+      <h3 style="color:var(--primary); margin-bottom:0.85rem; display:flex; align-items:center; gap:0.5rem;">
+        📚 Referencias Bibliográficas (Normas APA 7.ª Edición)
+      </h3>
+      <div class="apa-item">Al-Fuqaha, A., Guizani, M., Mohammadi, M., Aledhari, M., &amp; Ayyash, M. (2015). Internet of Things: A survey on enabling technologies, protocols, and applications. <em>IEEE Communications Surveys &amp; Tutorials</em>, <em>17</em>(4), 2347–2376. https://doi.org/10.1109/COMST.2015.2444095</div>
+      <div class="apa-item">Atzori, L., Iera, A., &amp; Morabito, G. (2010). The Internet of Things: A survey. <em>Computer Networks</em>, <em>54</em>(15), 2787–2805. https://doi.org/10.1016/j.comnet.2010.05.010</div>
+      <div class="apa-item">Bonomi, F., Milito, R., Zhu, J., &amp; Addepalli, S. (2012). Fog computing and its role in the Internet of Things. En <em>Proceedings of the First Edition of the MCC Workshop on Mobile Cloud Computing</em> (pp. 13–16). ACM. https://doi.org/10.1145/2342509.2342513</div>
+      <div class="apa-item">Botta, A., De Donato, W., Persico, V., &amp; Pescapé, A. (2016). Integration of Cloud computing and Internet of Things: A survey. <em>Future Generation Computer Systems</em>, <em>56</em>, 684–700. https://doi.org/10.1016/j.future.2015.09.021</div>
+      <div class="apa-item">Chaparro W. F. (2025). Internet de las Cosas y Cloud Computing <em>Ediciones USTA, Tunja</em>, pgs 13-52. </div>
+	  <div class="apa-item">Gubbi, J., Buyya, R., Marusic, S., &amp; Palaniswami, M. (2013). Internet of Things (IoT): A vision, architectural elements, and future directions. <em>Future Generation Computer Systems</em>, <em>29</em>(7), 1645–1660. https://doi.org/10.1016/j.future.2013.01.010</div>
+      <div class="apa-item">Kranz, M. (2017). <em>Building the Internet of Things: Implement new business models, disrupt competitors, transform your industry</em>. John Wiley &amp; Sons.</div>
+      <div class="apa-item">Sethi, P., &amp; Sarangi, S. R. (2017). Internet of Things: Architectures, protocols, and applications. <em>Journal of Electrical and Computer Engineering</em>, <em>2017</em>, Artículo 9324035. https://doi.org/10.1155/2017/9324035</div>
+      <div class="apa-item">Shi, W., Cao, J., Zhang, Q., Li, Y., &amp; Xu, L. (2016). Edge computing: Vision and challenges. <em>IEEE Internet of Things Journal</em>, <em>3</em>(5), 637–646. https://doi.org/10.1109/JIOT.2016.2579198</div>
+      <div class="apa-item">Unión Internacional de Telecomunicaciones. (2012). <em>Recomendación UIT-T Y.2060: Descripción general de Internet de los objetos</em>. Sector de Normalización de las Telecomunicaciones de la UIT. https://www.itu.int/rec/T-REC-Y.2060-201206-I/es</div>
+      <div style="margin-top:1rem; padding:0.85rem; background:#f1f5f9; border-radius:8px; border-left:4px solid var(--primary); font-size:0.84rem;">
+          <strong>Declaración de Uso de IA:</strong> En la construcción de esta presentación interactiva en HTML5 se empleó asistencia de inteligencia artificial generativa (Gemini) como apoyo en la estructuración del código web, diseño de diagramas vectoriales SVG.
+      </div>`
+	;
+    document.getElementById('infoModal').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('infoModal').classList.remove('open');
+  }
+
+  function closeModalOnBg(e) {
+    if (e.target.id === 'infoModal') closeModal();
+  }
+
+  // Slide 5: End-to-End Variable Pipeline (Vigilancia Inteligente)
+  const pipeSteps = [
+    {
+      title: "Etapa 1: Obtención y Adquisición de la Variable Física",
+      detail: "En el nodo de <strong>vigilancia inteligente</strong>, un sensor PIR (infrarrojo pasivo) y un contacto magnético detectan movimiento y apertura de puerta, mientras el módulo de cámara edge calcula la probabilidad de presencia humana (0.0 a 1.0) vía bus MIPI/GPIO.",
+      code: `// Lectura cruda en controlador Edge (ESP32-S3 / Raspberry Pi Cam)\nraw_events = [{pir: 1, confidence: 0.14}, {pir: 1, confidence: 0.91}, {pir: 1, confidence: 0.94}]`
+    },
+    {
+      title: "Etapa 2: Depuración y Limpieza en el Borde (Edge Filtering)",
+      detail: "Para evitar falsas alarmas (sombras, viento o fauna) y no saturar la red con video continuo, el controlador aplica un filtro antirrebote (<em>debounce</em> de 1.5 s) y descarta detecciones con confianza inferior al umbral de 0.75.",
+      code: `// Depuración en Edge Controller:\n// 1. Descarta confidence = 0.14 (ruido ambiental)\n// 2. Confirma persistencia > 1.5 s -> Evento depurado (confidence_avg = 0.925)`
+    },
+    {
+      title: "Etapa 3: Clasificación, Estructuración y Metadatos",
+      detail: "El dato limpio se clasifica como <strong>alerta crítica de seguridad</strong> (diferenciándolo de mensajes periódicos de telemetría <em>heartbeat</em>), se normaliza en esquema JSON ligero con marca de tiempo ISO-8601 y zona física.",
+      code: `{\n  "device_id": "cam-perimetro-norte-02",\n  "timestamp": "2026-11-15T20:45:10Z",\n  "category": "SECURITY_INTRUSION",\n  "metrics": { "human_confidence": 0.925, "door_state": "OPEN" },\n  "quality_flag": "EDGE_VERIFIED"\n}`
+    },
+    {
+      title: "Etapa 4: Procesamiento en Niebla (Fog) y Nube (Cloud)",
+      detail: "El broker MQTT en el nodo Fog recibe el mensaje en <code>seguridad/zona_norte/alertas</code>, almacena localmente el clip de respaldo y reenvía el evento al motor de reglas en la nube para cruzar horarios autorizados y registrar auditoría.",
+      code: `-- Regla SQL en Cloud IoT Rule Engine:\nSELECT device_id, metrics.human_confidence, timestamp\nFROM 'seguridad/+/alertas'\nWHERE category = 'SECURITY_INTRUSION' AND metrics.human_confidence >= 0.85`
+    },
+    {
+      title: "Etapa 5: Aplicación, Visualización y Actuación",
+      detail: "La consola de monitoreo visualiza la alerta geolocalizada con el clip de evidencia, notifica al equipo de seguridad y publica un comando MQTT hacia los actuadores para encender reflectores LED y activar el bloqueo electromagnético.",
+      code: `// Comando automatizado hacia actuadores de campo:\nTopic: seguridad/zona_norte/actuadores\nPayload: { "floodlight": "ON", "electro_lock": "ENGAGE", "alarm_strobe": "ACTIVE" }`
+    }
+  ];
+
+  function selectPipeStep(idx, el) {
+    document.querySelectorAll('.pipe-node').forEach(n => n.classList.remove('active'));
+    if (el) el.classList.add('active');
+    const step = pipeSteps[idx];
+    document.getElementById('pipeDetail').innerHTML = `
+      <span class="pill-tag">Trazabilidad Etapa ${idx + 1} de 5</span>
+      <h3 style="color:var(--primary); margin:0.5rem 0 0.65rem;">${step.title}</h3>
+      <p style="color:#334155; font-size:0.96rem;">${step.detail}</p>
+      <pre class="payload-box">${step.code}</pre>
+    `;
+  }
+
+  // Slide 6: Filter Transport Table
+  function filterTransport(cat, btn) {
+    document.querySelectorAll('#slide-5 .hotspot-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    document.querySelectorAll('#transportTable tbody tr').forEach(row => {
+      if (cat === 'all' || row.dataset.cat === cat) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  // Initialize default states
+  selectConcept('atzori', document.querySelector('#conceptHotspots .hotspot-btn'));
+  renderArch();
+  selectPipeStep(0, document.querySelector('.pipe-node'));
+</script>
+</body>
+</html>
